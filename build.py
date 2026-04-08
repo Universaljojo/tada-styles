@@ -76,7 +76,6 @@ def build() -> None:
             "code": f"#{i:03d}",
             "title": it.get("title", ""),
             "thumb": thumb_paths.get(i, it.get("cover", "")),
-            "cover": it.get("cover", ""),
             "categories": it.get("originalCategories", []) or [],
         })
 
@@ -265,14 +264,13 @@ TEMPLATE = r"""<!doctype html>
   .modal-inner {
     background: #fff;
     border-radius: var(--radius);
-    max-width: 900px;
+    max-width: 460px;
     width: 100%;
-    max-height: 90vh;
     overflow: hidden;
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 24px;
+    padding: 56px 32px 40px;
     box-shadow: 0 24px 64px rgba(0,0,0,0.3);
     position: relative;
   }
@@ -294,25 +292,20 @@ TEMPLATE = r"""<!doctype html>
     transition: background 0.18s;
   }
   .modal-close:hover { background: rgba(0,0,0,0.12); }
-  .modal img {
-    max-width: 100%;
-    max-height: 70vh;
-    border-radius: 10px;
-    object-fit: contain;
-    background: #f6f6f6;
-  }
   .modal-title {
-    margin: 20px 0 6px;
-    font-size: 22px;
+    font-size: 24px;
     font-weight: 700;
     text-align: center;
+    margin: 0 0 12px;
   }
   .modal-code {
     color: var(--accent);
-    font-size: 16px;
-    font-weight: 600;
-    letter-spacing: 1px;
-    margin-bottom: 12px;
+    font-size: 56px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    line-height: 1;
+    margin-bottom: 24px;
+    font-variant-numeric: tabular-nums;
   }
   .modal-hint {
     color: var(--text-soft);
@@ -351,7 +344,6 @@ TEMPLATE = r"""<!doctype html>
   <div class="modal" id="modal">
     <div class="modal-inner" id="modalInner">
       <button class="modal-close" id="modalClose" aria-label="关闭">×</button>
-      <img id="modalImg" alt="">
       <div class="modal-title" id="modalTitle"></div>
       <div class="modal-code" id="modalCode"></div>
       <div class="modal-hint">想用这个风格？把编号 <strong id="modalCodeHint"></strong> 发给 Tada 团队即可</div>
@@ -368,7 +360,6 @@ const filtersEl = document.getElementById('filters');
 const gridEl = document.getElementById('grid');
 const countEl = document.getElementById('count');
 const modal = document.getElementById('modal');
-const modalImg = document.getElementById('modalImg');
 const modalTitle = document.getElementById('modalTitle');
 const modalCode = document.getElementById('modalCode');
 const modalCodeHint = document.getElementById('modalCodeHint');
@@ -442,8 +433,6 @@ function renderGrid() {
 }
 
 function openModal(s) {
-  modalImg.src = s.cover;
-  modalImg.alt = s.title;
   modalTitle.textContent = s.title;
   modalCode.textContent = s.code;
   modalCodeHint.textContent = s.code;
